@@ -65,7 +65,7 @@ text-align: center;
   align-self: center;
   border: none;
   height: 30px;
-
+  cursor: pointer;
 }  
 
 /* Modal Overlay */
@@ -166,8 +166,7 @@ text-align: center;
   font-weight: 700;
   line-height: 24px;
   text-align: center;
-
-
+  cursor: pointer;
 }
 
 .btn-action{
@@ -190,8 +189,7 @@ text-align: center;
   font-weight: 700;
   line-height: 24px;
   text-align: center;
-
-
+  cursor: pointer;
 }
 
 /* Close Button */
@@ -247,7 +245,19 @@ opacity: 0px;
 .form-control:focus {
   color: #495057;
   background-color: #fff;
-  border-color: #80bdff;
+  border: 3px solid #01959F33;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.25rem #01959F33;
+}
+
+.form-control:default {
+  border: 2px solid #E0E0E0
+}
+
+.form-control:filled {
+  border: 2px solid #E0E0E0
+}
+
+.form-control:active {
+  border: 2px solid #01959F
 }
