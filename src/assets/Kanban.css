@@ -2,14 +2,14 @@
 .kanban-content{
     display: flex;
     flex-direction: row;
-    gap: 16px;
+    gap: 1rem;
     flex-wrap: wrap;
 }
 
 .card{
     border: 1px;
     border-style: solid;
-    padding: 16px;
+    padding: 1rem;
     gap: 8px;
     border-radius: 4px;
     width:25%;
@@ -43,9 +43,11 @@ line-height: 20px;
 text-align: left;
 color: #404040;
 margin-top: 5px;
+margin-bottom: 10px;
 }
 
 .card-footer{
+    padding-top: 5px;
     display: flex;
     justify-content: flex-start;
 }
@@ -60,4 +62,120 @@ color: #1D1F20;
 background-color: transparent;
 border: none;
 cursor: pointer;
+}
+
+.card-task{
+padding: 1rem;
+gap: 8px;
+border-radius: 4px;
+opacity: 0px;
+background-color: #FAFAFA;
+border: 1px solid #E0E0E0
+}
+
+.item-name{
+gap: 0px;
+opacity: 0px;
+font-family: Nunito Sans;
+font-size: 14px;
+font-weight: 700;
+line-height: 24px;
+text-align: left;
+font-weight: bold;
+margin: 0;
+margin-bottom: 5px;
+border-bottom:1px #E0E0E0;
+border-bottom-style: dashed;
+}
+
+.item-menu{
+    display: flex;
+    flex-direction: row;
+    gap: 26px;
+    padding-top: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+.item-persen{
+margin-top: 0px;
+width: 1.5rem;
+height: 1rem;
+gap: 0px;
+opacity: 0px;
+font-family: Inter;
+font-size: 12px;
+font-weight: 400;
+line-height: 1rem;
+text-align: left;
+color:#757575;
+}
+
+.progress{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    background-color: #EDEDED;
+    height: 1rem;
+    width: 11rem;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.progress-container{
+    height: 1rem;
+    border-radius: 10px;
+    
+}
+.progress-bar {
+    width: 11rem;
+    height: 1rem;
+    border-radius: 10px 0px 0px 10px;
+    background-color: #01959F;
+  
+}
+
+.btn-setting{
+    margin-left: 10px;
+}
+
+.dropdown-menu {
+  position:inherit;
+  left: 0;
+  background-color: white; /* Atur warna latar belakang sesuai kebutuhan */
+  border: 1px solid rgba(0, 0, 0, 0.15); /* Atur warna border sesuai kebutuhan */
+  border-radius: 5px; /* Atur border-radius sesuai kebutuhan */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Atur bayangan sesuai kebutuhan */
+  padding: 10px; /* Atur padding sesuai kebutuhan */
+}
+
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu ul li {
+  padding: 8px 0;
+}
+
+.dropdown-menu ul li i {
+  margin-right: 5px;
+}
+
+.btn-delete{
+    cursor: pointer;
+}
+
+.btn-edit{
+    cursor: pointer;
+}
+
+.text-delete{
+font-family: Nunito Sans;
+font-size: 14px;
+font-weight: 400;
+line-height: 24px;
+text-align: left;
+color: #404040;
 }
