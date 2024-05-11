@@ -5,8 +5,7 @@ function Test() {
 
   return (
     <>
-      <p>ini task</p>
-      <hr></hr>
+      <p style={{display: 'none'}}>ini task</p>
 
     </>
   );
