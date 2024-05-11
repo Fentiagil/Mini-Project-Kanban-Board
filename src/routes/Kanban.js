@@ -216,7 +216,8 @@ function Kanban() {
   };
 
   useEffect(() => {
-    fetchData(); // Memanggil fungsi fetchData saat komponen dimuat pertama kali
+    fetchData(); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
 
