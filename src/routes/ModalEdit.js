@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import '../assets/Kanban.css';
 import '../App.css';
 
-function ModalEdit({handleClose, handleEditTask, todoId, itemId, setTaskname, taskName, progress, setProgress, item }) {
+function ModalEdit({handleClose, handleEditTask, todoId, itemId, setTaskname, taskName, progress, setProgress, error}) {
 
   return (
 
@@ -21,6 +21,9 @@ function ModalEdit({handleClose, handleEditTask, todoId, itemId, setTaskname, ta
 
           {/* FORM EDIT TASK */}
           <form className='formulir'> 
+
+            {/* HANDLE ERROR */}
+            {error && <div className='text-danger'>{error}</div>}
           
             {/* Hidden input untuk menyimpan todoId */}
             <input type="hidden" id="todoId" value={todoId} />

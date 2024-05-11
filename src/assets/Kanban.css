@@ -165,10 +165,28 @@ color:#757575;
 
 .btn-delete{
     cursor: pointer;
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
 }
 
 .btn-edit{
     cursor: pointer;
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
+}
+
+.btn-edit :hover{
+    color:#01959F;
+}
+
+.btn-delete :hover{
+    color:#E11428;
 }
 
 .text-delete{

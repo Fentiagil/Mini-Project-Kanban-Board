@@ -161,6 +161,7 @@ function Kanban() {
       fetchTodoItems(todo.id);
     }
   }, [todo]);
+  
 
   return (
     <div>
@@ -218,8 +219,9 @@ function Kanban() {
 
       {/* MODAL EDIT TASK */}
       {showEdit && (
-        <ModalEdit handleClose={handleCloseEdit} item={todoItems} handleEditTask={handleEditTask} todoId={selectedTodoId} itemId={selectedItemId} setTaskname={setTaskname} taskName={taskName} progress={progress} setProgress={setProgress}  />
-      )}      
+        <ModalEdit handleClose={handleCloseEdit} handleEditTask={handleEditTask} todoId={selectedTodoId} itemId={selectedItemId} setTaskname={setTaskname} taskName={taskName} progress={progress} setProgress={setProgress} error={error1} />
+      )} 
+    
               
     </div>
   );

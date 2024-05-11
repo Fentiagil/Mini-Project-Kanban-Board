@@ -1,0 +1,34 @@
+.btn-mvRight :hover{
+color:#01959F;
+
+}
+
+.btn-mvRight{
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.menu-btn{
+    display: flex;
+    flex-direction: row;
+}
+
+.text-btn{
+    margin: 0px;
+}
+.btn-mvLeft :hover{
+    color:#01959F;
+}
+
+.btn-mvLeft{
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
+    cursor: pointer;
+}
