@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import axios from 'axios';
 import '../assets/Kanban.css';
 import '../App.css';
@@ -111,11 +111,13 @@ function Kanban() {
   //FUNC UNTUK GET DATA ITEMS
   const fetchTodoItems = async ($todo_id) => { 
     try {
+      console.log("Fetching todo items for todo_id:", $todo_id); 
       const response = await axios.get(`https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log("Response for todo items:", response.data);
       setTodoItems(prevTodoItems => [...prevTodoItems, ...response.data]);
     } catch (error) {
       console.error('Error fetching todo items:', error);
@@ -210,14 +212,12 @@ function Kanban() {
       fetchData();
     } catch (error) {
       console.error('Error moving task:', error);
-      // Handle error
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-
-  // }, []);
+  useEffect(() => {
+    fetchData(); // Memanggil fungsi fetchData saat komponen dimuat pertama kali
+  }, []);
   
 
   return (
