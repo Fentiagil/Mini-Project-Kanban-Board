@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename="/v1">
           <Kanban/> 
       </BrowserRouter>
     </div>
