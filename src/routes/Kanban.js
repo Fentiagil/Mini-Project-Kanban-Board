@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../assets/Kanban.css';
 import '../App.css';
@@ -214,11 +214,10 @@ function Kanban() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-    fetchTodoItems();
+  // useEffect(() => {
+  //   fetchData();
 
-  }, []);
+  // }, []);
   
 
   return (
