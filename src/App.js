@@ -1,5 +1,6 @@
 import './App.css';
 import './assets/Kanban.css';
+import './assets/ItemTask.css';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Kanban from './routes/Kanban';
