@@ -1,11 +1,11 @@
-import HeaderUtama from './HeaderUtama';
+// import HeaderUtama from './HeaderUtama';
 import Kanban from './Kanban';
 
 function LandingPage() {
 
   return (
     <div>        
-        <HeaderUtama/>
+        {/* <HeaderUtama/> */}
         <Kanban/>     
     </div>
   );

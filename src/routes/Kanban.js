@@ -6,12 +6,17 @@ import ItemTask from './ItemTask';
 import ModalDelete from './ModalDelete';
 import ModalEdit from './ModalEdit';
 import ModalAdd from './ModalAdd';
+import HeaderUtama from './HeaderUtama';
+import ModalAddGroup from './ModalAddGroup';
 
 function Kanban() {
   // MENYIMPAN DATA TODOS DAN ITEMS
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState(null);
   const [todoItems, setTodoItems] = useState([]);
+
+  //TOKEN 
+  const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjIsImV4cCI6MTcyNDA1NTcyMn0.obRPo6qN-JM8qjRPqG7jTs4wKddWNA7dmmLNBaaU3AA';
 
   // GET TODO ID DAN ITEM ID UNTUK CRUD
   const [selectedTodoId, setSelectedTodoId] = useState(null);
@@ -29,10 +34,37 @@ function Kanban() {
   const [error, setError] = useState('');
   const [error1, setError1] = useState('');
 
+  // DATA UNTUK MODAL ADD GROUP
+  const [showGroup, setShowGroup] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [error2, setError2] = useState('');
+
   // MENAMPILKAN MODAL
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+
+  // HANDLE MODAL ADD GROUP
+  const handleCloseGroup = () => setShowGroup(false);
+  const handleShowGroup = () => setShowGroup(true);
+
+  // HANDLE SUBMIT NEW GROUP
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        'https://todo-api-18-140-52-65.rakamin.com/todos',
+        { title, description },
+        { headers: { Authorization: `Bearer ${token}`} }
+      );
+      console.log('Group added successfully:', response.data);
+      handleCloseGroup();
+      fetchData();
+    } catch (error) {
+      console.error('Error adding group:', error2);
+      setError2('Error adding group. Please try again later.');
+    }
+  };
 
   // HANDLE MODAL ADD TASK
   const handleClose = () => setShow(false);
@@ -55,9 +87,8 @@ function Kanban() {
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
 
-  // FUNC UNTUK GET DATA TODOS
+  //FUNC UNTUK GET DATA TODOS
   const fetchData = async () => {
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
     try {
       const response = await axios.get('https://todo-api-18-140-52-65.rakamin.com/todos', {
         headers: {
@@ -65,21 +96,27 @@ function Kanban() {
         }
       });
       setTodos(response.data);
+      setTodoItems([]); 
+      response.data.forEach(todo => {
+        fetchTodoItems(todo.id);
+      });
+      // if (todo) {
+      //   fetchTodoItems(todo.id);
+      // }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // FUNC UNTUK GET DATA ITEMS
-  const fetchTodoItems = async () => { 
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
+  //FUNC UNTUK GET DATA ITEMS
+  const fetchTodoItems = async ($todo_id) => { 
     try {
-      const response = await axios.get(`https://todo-api-18-140-52-65.rakamin.com/todos/${todo.id}/items`, {
+      const response = await axios.get(`https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      setTodoItems(response.data);
+      setTodoItems(prevTodoItems => [...prevTodoItems, ...response.data]);
     } catch (error) {
       console.error('Error fetching todo items:', error);
     }
@@ -87,7 +124,6 @@ function Kanban() {
 
   // FUNC UNTUK DELETE DATA ITEMS
   const handleDelete = async ($todo_id, $id) => {
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
     try {
       await axios.delete(`https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items/${$id}`, {
         headers: {
@@ -95,7 +131,6 @@ function Kanban() {
         }
       });
       handleCloseDel();
-      fetchTodoItems();
       if (todo) {
         fetchTodoItems(todo.id);
       }
@@ -107,7 +142,7 @@ function Kanban() {
   // FUNC UNTUK ADD DATA TASK
   const handleSaveTask = async () => {
     try {
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
+
       const response = await axios.post(
         `https://todo-api-18-140-52-65.rakamin.com/todos/${todo.id}/items`,
         {
@@ -122,7 +157,7 @@ function Kanban() {
       );
       console.log('New task added:', response.data);
       handleClose();
-      fetchTodoItems();
+      fetchData();
     } catch (error) {
       console.error('Error adding new task:', error);
       setError('Failed to add new task');
@@ -132,7 +167,7 @@ function Kanban() {
   // FUNC UNTUK EDIT DATA TASK
   const handleEditTask = async ($todo_id, $id) => {
     try {
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
+
       const response = await axios.patch(
         `https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items/${$id}`,
         {
@@ -148,23 +183,48 @@ function Kanban() {
       );
       console.log('Task Updated:', response.data);
       handleCloseEdit();
-      fetchTodoItems();
+      if (todo) {
+        fetchTodoItems(todo.id);
+      }
     } catch (error) {
       console.error('Error update task:', error);
       setError1('Failed to update task');
     }
   };
 
+  const moveTask = async ($todo_id, $id, direction) => {
+    const targetTodoId = direction === 'right' ? $todo_id + 1 : $todo_id - 1;
+    
+    try {
+      const response = await axios.patch(
+        `https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items/${$id}`,
+        { target_todo_id: targetTodoId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      console.log('Task Moved:', response.data);
+      fetchData();
+    } catch (error) {
+      console.error('Error moving task:', error);
+      // Handle error
+    }
+  };
+
   useEffect(() => {
     fetchData();
-    if (todo) {
-      fetchTodoItems(todo.id);
-    }
-  }, [todo]);
+    fetchTodoItems();
+
+  }, []);
   
 
   return (
     <div>
+      <HeaderUtama handleShowGroup={handleShowGroup} /> 
+
       {/* KANBAN GROUP CONTENT */}
       <div className="kanban-content">
 
@@ -183,15 +243,11 @@ function Kanban() {
 
               {/* GROUP TASK ITEMS CONTENT */}
               <div className="card-content">
-                {todoItems.map(item => {
-                  if (item.todo_id === todo.id) {
-                    return (
-                      <>
-                      <ItemTask key={item.id} item={item} handleShowDel={handleShowDel} handleShowEdit={handleShowEdit} />
-                      </>
-                    );               
-                  }                  
-                })}
+              {todoItems
+              .filter(item => item.todo_id === todo.id)
+              .map(filteredItem => (
+                <ItemTask key={filteredItem.id} item={filteredItem} handleShowDel={handleShowDel} handleShowEdit={handleShowEdit} moveTask={moveTask} />
+              ))}
               </div>
             </div>
 
@@ -207,6 +263,11 @@ function Kanban() {
       </div>
       {/* END KANBAN GROUP CONTENT */}
 
+      {/* MODAL ADD NEW GROUP */}
+      {showGroup && (
+        <ModalAddGroup handleClose={handleCloseGroup} error={error2} handleSubmit={handleSubmit} setDescription={setDescription} description={description} title={title} setTitle={setTitle} />
+      )}
+
       {/* MODAL ADD NEW TASK */}
       {show && (
         <ModalAdd handleClose={handleClose} handleSaveTask={handleSaveTask} setTaskname={setTaskname} taskName={taskName} progress={progress} setProgress={setProgress} error={error} />
@@ -221,7 +282,6 @@ function Kanban() {
       {showEdit && (
         <ModalEdit handleClose={handleCloseEdit} handleEditTask={handleEditTask} todoId={selectedTodoId} itemId={selectedItemId} setTaskname={setTaskname} taskName={taskName} progress={progress} setProgress={setProgress} error={error1} />
       )} 
-    
               
     </div>
   );

@@ -4,6 +4,7 @@
     flex-direction: row;
     gap: 1rem;
     flex-wrap: wrap;
+    padding: 1rem;
 }
 
 .card{
@@ -12,7 +13,7 @@
     padding: 1rem;
     gap: 8px;
     border-radius: 4px;
-    width:25%;
+    width:15rem;
 }
 
 .card-header{
@@ -91,7 +92,7 @@ border-bottom-style: dashed;
 .item-menu{
     display: flex;
     flex-direction: row;
-    gap: 26px;
+    gap: 12px;
     padding-top: 5px;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -118,7 +119,7 @@ color:#757575;
     gap: 12px;
     background-color: #EDEDED;
     height: 1rem;
-    width: 11rem;
+    width: 8rem;
     border-radius: 10px 0px 0px 10px;
 }
 
@@ -128,7 +129,7 @@ color:#757575;
     
 }
 .progress-bar {
-    width: 11rem;
+    width: 8rem;
     height: 1rem;
     border-radius: 10px 0px 0px 10px;
     background-color: #01959F;
@@ -137,6 +138,13 @@ color:#757575;
 
 .btn-setting{
     margin-left: 10px;
+    border: none;
+    cursor:pointer;
+    background-color: transparent;
+}
+
+.btn-setting :hover{
+    background-color: #EDEDED;
 }
 
 .dropdown-menu {
