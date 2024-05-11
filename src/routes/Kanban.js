@@ -1,5 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import axios from 'axios';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; // Import library drag and drop
 import '../assets/Kanban.css';
 import '../App.css';
 import ItemTask from './ItemTask';
@@ -16,7 +17,7 @@ function Kanban() {
   const [todoItems, setTodoItems] = useState([]);
 
   //TOKEN 
-  const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjIsImV4cCI6MTcyNDA1NTcyMn0.obRPo6qN-JM8qjRPqG7jTs4wKddWNA7dmmLNBaaU3AA';
+  const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjMsImV4cCI6MTcyNDA5MTYxNn0.ibK0FdOhTqTGbAc-jgEa0Zl2iVbCTye6pAtydv7Gxxo';
 
   // GET TODO ID DAN ITEM ID UNTUK CRUD
   const [selectedTodoId, setSelectedTodoId] = useState(null);
@@ -223,6 +224,35 @@ function Kanban() {
     }
   };
 
+  const onDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+    
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const sourceTodoId = parseInt(source.droppableId);
+    const destinationTodoId = parseInt(destination.droppableId);
+
+    if (sourceTodoId !== destinationTodoId) {
+      // Handle move between different todo
+      console.log(`Move task ${draggableId} from todo ${sourceTodoId} to todo ${destinationTodoId}`);
+    } else {
+      // Handle move within the same todo
+      console.log(`Move task ${draggableId} within todo ${sourceTodoId}`);
+    }
+    
+    // Send request to update todo_id
+    moveTask(sourceTodoId, draggableId, destinationTodoId);
+  };
+
   useEffect(() => {
     fetchData(); 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -234,41 +264,61 @@ function Kanban() {
       <HeaderUtama handleShowGroup={handleShowGroup} />
 
       {/* KANBAN GROUP CONTENT */}
-      <div className="kanban-content">
+      <DragDropContext onDragEnd={onDragEnd}> {/* Wrap all draggable components with DragDropContext */}
+        <div className="kanban-content">
 
-        {/* MENAMPILKAN GROUP TASK */}
-        {todos.map((todo, index) => (
-          <div className="card mb-3" key={todo.id} style={{ backgroundColor: bgColors[index % colors.length], borderColor: colors[index % colors.length] }}>
-            
-            {/* CARD HEADER */}
-            <div className="card-header">
-              <div className='card-title' style={{ color: fontColors[index % colors.length], borderColor: borderTextColors[index % colors.length] }}>{todo.title}</div>
-            </div>
+          {/* MENAMPILKAN GROUP TASK */}    
+          {todos.map((todo, index) => (
+            <Droppable droppableId={`${todo.id}`} key={todo.id}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="card mb-3"
+                  style={{ backgroundColor: bgColors[index % colors.length], borderColor: colors[index % colors.length] }}
+                >
+                  {/* CARD HEADER */}
+                  <div className="card-header">
+                    <div className='card-title' style={{ color: fontColors[index % colors.length], borderColor: borderTextColors[index % colors.length] }}>{todo.title}</div>
+                  </div>
 
-            {/* CARD BODY */}
-            <div className="card-body">
-              <h5 className="card-desc">{todo.description}</h5>
+                  {/* CARD BODY */}
+                  <div className="card-body">
+                    <h5 className="card-desc">{todo.description}</h5>
 
-              {/* GROUP TASK ITEMS CONTENT */}
-              <div className="card-content">
-              {todoItems
-              .filter(item => item.todo_id === todo.id)
-              .map(filteredItem => (
-                <ItemTask key={filteredItem.id} item={filteredItem} handleShowDel={handleShowDel} handleShowEdit={handleShowEdit} moveTask={moveTask} />
-              ))}
-              </div>
-            </div>
+                    {/* GROUP TASK ITEMS CONTENT */}
+                    <div className="card-content">
+                      {todoItems
+                        .filter(item => item.todo_id === todo.id)
+                        .map((filteredItem, index) => (
+                          <Draggable draggableId={`${filteredItem.id}`} index={index} key={filteredItem.id}>
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <ItemTask key={filteredItem.id} item={filteredItem} handleShowDel={handleShowDel} handleShowEdit={handleShowEdit} moveTask={moveTask} />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                    </div>
+                  </div>
 
-            {/* CARD FOOTER */}
-            <div className="card-footer">
-              <button type="button" className="btn-newtask" onClick={() => handleShow(todo)}>
-                <i class="fa-solid fa-plus"></i> New Task 
-              </button>
-            </div>
+                  {/* CARD FOOTER */}
+                  <div className="card-footer">
+                    <button type="button" className="btn-newtask" onClick={() => handleShow(todo)}>
+                      <i className="fa-solid fa-plus"></i> New Task 
+                    </button>
+                  </div>
+                </div>
+              )}
+            </Droppable>
+          ))}
 
-          </div>
-        ))}
-      </div>
+        </div>
+      </DragDropContext>
       {/* END KANBAN GROUP CONTENT */}
 
       {/* MODAL ADD NEW GROUP */}
