@@ -222,7 +222,7 @@ function Kanban() {
   return (
     <div>
       {/* HEADER APP */}
-      <header className="App-header"> 
+      <div className="App-header"> 
         <div className='Header-menu'> 
 
           <div className="Right-side">
@@ -236,7 +236,7 @@ function Kanban() {
 
           <div className="Left-side"></div>
         </div>      
-      </header>
+      </div>
       <hr></hr>
 
       {/* KANBAN GROUP CONTENT */}
