@@ -49,7 +49,7 @@ return (
                             </div>
                         </li> 
 
-                        <li type="button" className="btn-edit" onClick={() => handleShowEdit(item.todo_id, item.id)}>
+                        <li type="button" className="btn-edit" onClick={() => handleShowEdit(item.name, item.progress_percentage, item.todo_id, item.id)}>
                             <div className="menu-btn">
                                 <i class="fa-regular fa-pen-to-square"></i>
                                 <p className='text-btn'>Edit </p>

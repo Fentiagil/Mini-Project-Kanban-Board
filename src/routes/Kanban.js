@@ -22,6 +22,10 @@ function Kanban() {
   const [selectedTodoId, setSelectedTodoId] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
+  // GET DATA NAME DAN PERCENTAGE DARI TASK
+  const [selectedName, setSelectedName] = useState(null);
+  const [selectedProgress, setSelectedProgress] = useState(null);
+
   // PENGATURAN WARNA KANBAN GROUP
   const colors = ["#01959F", "#FEEABC", " #F5B1B7", "#B8DBCA"];
   const bgColors= ['#F7FEFF', "#FFFCF5", "#FFFAFA", "#F8FBF9"];
@@ -85,7 +89,13 @@ function Kanban() {
 
   // HANDLE MODAL EDIT TASK
   const handleCloseEdit = () => setShowEdit(false);
-  const handleShowEdit = () => setShowEdit(true);
+  const handleShowEdit = (Name, Persen, todoId, itemId) => {
+    setSelectedTodoId(todoId);
+    setSelectedItemId(itemId);
+    setSelectedName(Name);
+    setSelectedProgress(Persen);
+    setShowEdit(true);
+  };
 
   //FUNC UNTUK GET DATA TODOS
   const fetchData = async () => {
@@ -174,8 +184,8 @@ function Kanban() {
         `https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items/${$id}`,
         {
           target_todo_id: $todo_id, 
-          name: taskName, 
-          progress_percentage: progress 
+          name: selectedName, 
+          progress_percentage: selectedProgress
         },
         {
           headers: {
@@ -185,9 +195,7 @@ function Kanban() {
       );
       console.log('Task Updated:', response.data);
       handleCloseEdit();
-      if (todo) {
-        fetchTodoItems(todo.id);
-      }
+      fetchData();
     } catch (error) {
       console.error('Error update task:', error);
       setError1('Failed to update task');
@@ -280,7 +288,7 @@ function Kanban() {
 
       {/* MODAL EDIT TASK */}
       {showEdit && (
-        <ModalEdit handleClose={handleCloseEdit} handleEditTask={handleEditTask} todoId={selectedTodoId} itemId={selectedItemId} setTaskname={setTaskname} taskName={taskName} progress={progress} setProgress={setProgress} error={error1} />
+        <ModalEdit Name={selectedName} Persen={selectedProgress} handleClose={handleCloseEdit} handleEditTask={handleEditTask} todoId={selectedTodoId} itemId={selectedItemId} setSelectedName={setSelectedName}  setSelectedProgress={setSelectedProgress} error={error1} />
       )} 
               
     </div>

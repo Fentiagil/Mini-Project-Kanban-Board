@@ -1,8 +1,11 @@
-import React from 'react';
+
 import '../assets/Kanban.css';
 import '../App.css';
+import React from 'react';
 
-function ModalEdit({handleClose, handleEditTask, todoId, itemId, setTaskname, taskName, progress, setProgress, error}) {
+
+function ModalEdit({handleClose, handleEditTask, todoId, itemId, error, Name, Persen, setSelectedName, setSelectedProgress}) {
+
 
   return (
 
@@ -30,12 +33,12 @@ function ModalEdit({handleClose, handleEditTask, todoId, itemId, setTaskname, ta
 
             <div className="kolom">
               <label htmlFor="taskName" className="form-label">Task Name</label>
-              <input type="text" className="form-control" id="taskName" required placeholder={taskName} value={taskName} onChange={(e) => setTaskname(e.target.value)} />
+              <input type="text" className="form-control" id="taskName" required placeholder='Type your Task' value={Name} onChange={(e) => setSelectedName(e.target.value)} />
             </div>
 
             <div className="kolom">
               <label htmlFor="progress" className="form-label">Progress</label>
-              <input type="number" min={0} max={100} className="form-control" id="progress" required placeholder={progress} value={progress} onChange={(e) => setProgress(e.target.value)} style={{ width: '30%' }} />
+              <input type="number" min={0} max={100} className="form-control" id="progress" required placeholder='70%' value={Persen} onChange={(e) => setSelectedProgress(e.target.value)} style={{ width: '30%' }} />
             </div>
 
           </form>
