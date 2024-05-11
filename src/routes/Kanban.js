@@ -230,7 +230,7 @@ function Kanban() {
               <h3 className="Header-brand">Product Roadmap</h3>
             </div>
             <div className="Button flex-container">
-              <button type="button" className="btn-newgroup" onClick={handleShowGroup}><i className="fa-solid fa-plus"></i> Add New Group</button>
+              <button type="button" className=" btn btn-newgroup" onClick={handleShowGroup}><i className="fa-solid fa-plus"></i> Add New Group</button>
             </div>
           </div>
 
