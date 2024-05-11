@@ -4,6 +4,7 @@ import './assets/ItemTask.css';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Kanban from './routes/Kanban';
+import Test from './Test.js';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <div className="App">
       <BrowserRouter basename="/v1">
           <Kanban/> 
+          <Test/> 
       </BrowserRouter>
     </div>
     
