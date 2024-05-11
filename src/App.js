@@ -1,18 +1,16 @@
 import './App.css';
+import './assets/Kanban.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LandingPage from './routes/LandingPage';
-import Login from './routes/Login';
+import { BrowserRouter } from 'react-router-dom';
+import Kanban from './routes/Kanban';
+
 
 function App() {
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage/>}/>
-          <Route path="/login" element={<Login/>}/>
-        </Routes>
+          <Kanban/> 
       </BrowserRouter>
     </div>
     
