@@ -25,7 +25,7 @@ return (
                         <ProgressBar now={item.progress_percentage} />
                     </div>                              
                 </div>
-                <p className="item-persen">{item.progress_percentage}%</p>
+                <p className="item-persen">{item.progress_percentage === 100 ? <i className="fas fa-check-circle" style={{color: "#43936C"}}></i> : `${item.progress_percentage}%`}</p>
             </div>
 
             <button className="trigger-area btn-setting" onClick={toggleDropdown}>
