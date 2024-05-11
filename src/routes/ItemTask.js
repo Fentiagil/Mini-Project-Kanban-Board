@@ -1,4 +1,3 @@
-// ModalDelete.js
 import '../assets/Kanban.css';
 import '../App.css';
 import React, { useState } from 'react';
@@ -37,18 +36,14 @@ return (
                     <ul>
                         <li><i class="fa-solid fa-arrow-right"> </i>Move Right</li>
                         <li><i class="fa-solid fa-arrow-left"></i> Menu Left</li>
-                        <li type="button" className="btn-edit" onClick={() => handleShowEdit(item.id)}><i class="fa-regular fa-pen-to-square"></i> Edit</li>
+                        <li type="button" className="btn-edit" onClick={() => handleShowEdit(item.todo_id, item.id)}><i class="fa-regular fa-pen-to-square"></i> Edit</li>
                         <li type="button" className="btn-delete" onClick={() => handleShowDel(item.todo_id, item.id)}><i class="fa-regular fa-trash-can"></i> Delete</li>
                     </ul>
                 </div>
             )}
                                         
         </div>  
-    </div>
-
-    {/* <ModalDelete show={showDelete} handleClose={handleCloseDel} handleDelete={handleDelete} key={item.id} item={item} hidden/> 
-    <ModalEdit show={showEdit} handleClose={handleCloseEdit} key={item.id} item={item} hidden/>  */}
-    
+    </div><br></br>
     </>
   );
 }
