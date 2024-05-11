@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/Kanban.css';
 import '../App.css';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import ItemTask from './ItemTask';
+import ModalDelete from './ModalDelete';
+import ModalEdit from './ModalEdit';
 
 function Kanban() {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState(null);
   const [todoItems, setTodoItems] = useState([]);
+
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   const colors = ["#01959F", "#FEEABC", " #F5B1B7", "#B8DBCA"];
   const bgColors= ['#F7FEFF', "#FFFCF5", "#FFFAFA", "#F8FBF9"];
@@ -15,19 +20,33 @@ function Kanban() {
   const borderTextColors = ["#4DB5BC", "#FEEABC", "#F5B1B7", "#B8DBCA"];
 
   const [show, setShow] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
   const [taskName, setTaskname] = useState('');
   const [progress, setProgress] = useState('');
   const [error, setError] = useState('');
 
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
+  const handleCloseDel = () => setShowDelete(false);
+  const handleShowDel = (todoId, itemId) => {
+    setSelectedTodoId(todoId);
+    setSelectedItemId(itemId);
+    setShowDelete(true);
+  };
+
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
+
+
   useEffect(() => {
     fetchData();
+  }, []);
+  
+  useEffect(() => {
     if (todo) {
       fetchTodoItems(todo.id);
     }
   }, [todo]);
-  
 
   const fetchData = async () => {
     const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
@@ -38,6 +57,7 @@ function Kanban() {
         }
       });
       setTodos(response.data);
+      fetchTodoItems();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -52,8 +72,27 @@ function Kanban() {
         }
       });
       setTodoItems(response.data);
+      fetchData();
     } catch (error) {
       console.error('Error fetching todo items:', error);
+    }
+  };
+
+  const handleDelete = async ($todo_id, $id) => {
+    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
+    try {
+      await axios.delete(`https://todo-api-18-140-52-65.rakamin.com/todos/${$todo_id}/items/${$id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      handleCloseDel();
+      fetchData();
+      if (todo) {
+        fetchTodoItems(todo.id);
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
     }
   };
 
@@ -66,12 +105,6 @@ function Kanban() {
  
   };
   
-  const handleCloseDel = () => setShowDelete(false);
-  const handleShowDel = () => setShowDelete(true);
-
-  const handleCloseEdit = () => setShowEdit(false);
-  const handleShowEdit = () => setShowEdit(true);
-
   const handleSaveTask = async () => {
     try {
       const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1NjAsImV4cCI6MTcyMzg5MzA2OH0.Dut3wk9ZNXYYiIfUIX8vJarrkcRXzMzPZ5Kin4gsZnI';
@@ -90,18 +123,11 @@ function Kanban() {
       console.log('New task added:', response.data);
       // Setelah menambahkan task, tutup modal
       handleClose();
-      // Ambil ulang data untuk menampilkan task baru
-      fetchData();
+      fetchTodoItems();
     } catch (error) {
       console.error('Error adding new task:', error);
       setError('Failed to add new task');
     }
-  };
-  
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
   };
 
   return (
@@ -119,34 +145,11 @@ function Kanban() {
                 {todoItems.map(item => {
                   if (item.todo_id === todo.id) {
                     return (
-                      <div className="card-task" key={item.id}>
-                        <p className="item-name">{item.name}</p>
-                        <div className="item-menu">
-                          <div className="progress">
-                            <div className="progress-container">
-                              <div className="progress-bar">
-                              <ProgressBar now={item.progress_percentage} />
-                              </div>                              
-                            </div>
-                            <p className="item-persen">{item.progress_percentage}%</p>
-                          </div>
-                          <button className="trigger-area" onClick={toggleDropdown}>
-                            <i className="fa-solid fa-ellipsis"></i>
-                          </button>
-                          {showDropdown && (
-                              <div className="dropdown-menu">
-                                <ul>
-                                  <li><i class="fa-solid fa-arrow-right"> </i>Move Right</li>
-                                  <li><i class="fa-solid fa-arrow-left"></i> Menu Left</li>
-                                  <li type="button" className="btn-edit" onClick={handleShowEdit}><i class="fa-regular fa-pen-to-square"></i> Edit</li>
-                                  <li type="button" className="btn-delete" onClick={handleShowDel}><i class="fa-regular fa-trash-can"></i> Delete</li>
-                                </ul>
-                              </div>
-                            )}                    
-                        </div>                     
-                      </div>
-                    );
-                  }
+                      <>
+                      <ItemTask key={item.id} item={item} handleShowDel={handleShowDel} handleShowEdit={handleShowEdit} />
+                      </>
+                    );               
+                  }                  
                 })}
               </div>
             </div>
@@ -188,50 +191,13 @@ function Kanban() {
       )}
 
       {showDelete && (
-        <div className="modal-overlay">
-          <div className="modal-delete">
-            <div className="modal-header-delete">
-              <h4 className="judul-modal">Delete Task</h4>
-              <button className="close-btn" onClick={handleCloseDel}>X</button>
-            </div>
-            <div className="modal-body-delete">
-              <p className="text-delete">Are you sure want to delete this task? your action can't be reverted.</p>
-            </div>
-            <div className="modal-footer-delete">
-              <button className="btn-cancel" onClick={handleCloseDel}>Cancel</button>
-              <button className="btn-action" style={{backgroundColor:"#E11428"}}>Delete</button>
-            </div>
-          </div>
-        </div>
+        <ModalDelete handleClose={handleCloseDel} handleDelete={handleDelete} todoId={selectedTodoId} itemId={selectedItemId} />
       )}
 
       {showEdit && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h4 className="judul-modal">Edit Task</h4>
-              <button className="close-btn" onClick={handleCloseEdit}>X</button>
-            </div>
-            <div className="modal-body">
-              <form className='formulir'>
-                {error && <div className='text-danger'>{error}</div>}
-                <div className="kolom">
-                  <label htmlFor="taskName" className="form-label">Task Name</label>
-                  <input type="text" className="form-control" id="taskName" required placeholder='Type your Task' value={taskName} onChange={(e) => setTaskname(e.target.value)} />
-                </div>
-                <div className="kolom">
-                  <label htmlFor="progress" className="form-label">Progress</label>
-                  <input type="number" min={0} max={100} className="form-control" id="progress" required placeholder='70%' value={progress} onChange={(e) => setProgress(e.target.value)} style={{ width: '30%' }} />
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button className="btn-cancel" onClick={handleCloseEdit}>Cancel</button>
-              <button className="btn-action" >Save Task</button>
-            </div>
-          </div>
-        </div>
-      )}
+        <ModalEdit handleClose={handleCloseEdit} />
+      )}      
+              
     </div>
   );
 }
